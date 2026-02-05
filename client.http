@@ -10,6 +10,21 @@ Content-Type: application/json
     "address": "1234567890"
 }
 
+### create pet
+POST http://localhost:3333/pets
+Content-Type: application/json
+
+{
+    "name": "Pituco",
+    "age": 4,
+    "size": "SMALL",
+    "city": "Rio de Janeiro",
+    "owners_phone": "21994621713",
+    "organizationId": "8dbb4514-100b-46d0-a4b2-ee6760a9575d"
+}
+
+
+
 
 ### logout
 POST http://localhost:3333/users
