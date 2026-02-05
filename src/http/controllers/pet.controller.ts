@@ -1,6 +1,15 @@
 import { CreatePetDTO, createPetSchema, filterPetsSchema } from "@/dtos/pet.dto";
 import { PetService } from "@/services/pet.service";
+import { getImageUrl } from "@/utils/image-url";
 import { FastifyReply, FastifyRequest } from "fastify";
+
+function withImageUrls<T extends { images?: { url: string }[] }>(baseUrl: string, data: T): T & { images: { url: string }[] } {
+    const list = data.images ?? [];
+    return {
+        ...data,
+        images: list.map((img) => ({ ...img, url: getImageUrl(baseUrl, img.url) })),
+    };
+}
 
 export class PetController {
     constructor(private petService: PetService) { }
@@ -20,13 +29,15 @@ export class PetController {
             return reply.status(404).send({ message: "Pet not found" });
         }
 
-        return reply.status(200).send(pet);
+        const baseUrl = `${request.protocol}://${request.headers.host}`;
+        return reply.status(200).send(withImageUrls(baseUrl, pet));
     }
 
     findByFilter = async (request: FastifyRequest, reply: FastifyReply) => {
         const filter = filterPetsSchema.parse(request.query);
         const pets = await this.petService.findByFilter(filter);
 
-        return reply.status(200).send(pets)
+        const baseUrl = `${request.protocol}://${request.headers.host}`;
+        return reply.status(200).send(pets.map((p) => withImageUrls(baseUrl, p)));
     }
 }

@@ -11,7 +11,6 @@ export class PrismaPetRepository implements IPetRepository {
                 age: data.age,
                 size: data.size,
                 city: data.city,
-                owners_phone: data.owners_phone,
                 organizationId: data.organizationId,
             },
         });
@@ -22,6 +21,9 @@ export class PrismaPetRepository implements IPetRepository {
     async findById(id: string): Promise<PetResponseDTO | null> {
         const pet = await prisma.pet.findUnique({
             where: { id },
+            include: {
+                images: true,
+            },
         });
 
         return pet;
@@ -30,6 +32,9 @@ export class PrismaPetRepository implements IPetRepository {
     async findByCity(city: string): Promise<PetResponseDTO[]> {
         const pets = await prisma.pet.findMany({
             where: { city },
+            include: {
+                images: true,
+            },
         });
 
         return pets;
@@ -42,6 +47,9 @@ export class PrismaPetRepository implements IPetRepository {
 
         const pets = await prisma.pet.findMany({
             where,
+            include: {
+                images: true,
+            },
         });
 
         return pets;

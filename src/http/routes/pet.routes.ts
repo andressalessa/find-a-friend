@@ -61,6 +61,19 @@ export async function petRoutes(app: FastifyInstance) {
                         created_at: { type: 'string', format: 'date-time' },
                         updated_at: { type: 'string', format: 'date-time' },
                         organizationId: { type: 'string' },
+                        images: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    id: { type: 'string' },
+                                    url: { type: 'string', description: 'Full URL to the image' },
+                                    pet_id: { type: 'string' },
+                                    created_at: { type: 'string', format: 'date-time' },
+                                    updated_at: { type: 'string', format: 'date-time' },
+                                },
+                            },
+                        },
                     },
                 },
             },
@@ -97,6 +110,19 @@ export async function petRoutes(app: FastifyInstance) {
                             created_at: { type: 'string', format: 'date-time' },
                             updated_at: { type: 'string', format: 'date-time' },
                             organizationId: { type: 'string' },
+                            images: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        id: { type: 'string' },
+                                        url: { type: 'string' },
+                                        pet_id: { type: 'string' },
+                                        created_at: { type: 'string', format: 'date-time' },
+                                        updated_at: { type: 'string', format: 'date-time' },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
