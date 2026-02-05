@@ -6,7 +6,11 @@
   "scripts": {
     "start:dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir build",
+    "dev:up": "docker compose up -d",
+    "dev:down": "docker compose down",
+    "migrate:dev": "npx prisma migrate dev",
+    "generate": "npx prisma generate"
   },
   "repository": {
     "type": "git",
@@ -21,6 +25,8 @@
   "homepage": "https://github.com/andressalessa/find-a-friend#readme",
   "devDependencies": {
     "@types/node": "25.2.0",
+    "@types/pg": "8.16.0",
+    "dotenv": "17.2.3",
     "eslint": "9.39.2",
     "prisma": "7.3.0",
     "tsup": "8.5.1",
@@ -28,8 +34,11 @@
     "typescript": "5.9.3"
   },
   "dependencies": {
-    "dotenv": "17.2.3",
+    "@prisma/adapter-pg": "7.3.0",
+    "@prisma/client": "7.3.0",
+    "bcryptjs": "3.0.3",
     "fastify": "5.7.4",
+    "pg": "8.18.0",
     "zod": "4.3.6"
   }
 }

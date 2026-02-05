@@ -13,9 +13,15 @@ npm i typescript @types/node tsx tsup -D
 # pra executar esses comandos basta digitar npx <comando> que irá executar comandos que estão em 
 # node_modules/bin
 npm i prisma -D
+npm install -D @types/pg
 
 npm i fastify
 npm i dotenv
+# this one is used to access the database
+npm i @prisma/client
+npm install pg @prisma/adapter-pg
+npm i bcryptjs
+
 ```
 
 ## Create ts config file
@@ -27,3 +33,7 @@ npx tsc --init
 ```
 npx prisma init
 ```
+
+
+# Processo
+- Rota -> Controller -> Service -> Repository
