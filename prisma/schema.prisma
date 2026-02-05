@@ -7,6 +7,7 @@
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
+  engineType = "client"
 }
 
 datasource db {
@@ -21,6 +22,9 @@ model Pet {
   city String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  organizationId String
+  organization Organization @relation(fields: [organizationId], references: [id])
   @@map("pets")
 }
 
@@ -28,10 +32,13 @@ model Organization {
   id String @id @default(uuid())
   name String
   email String @unique
-  password String
+  password_hash String
   whatsapp String
   address String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  pets Pet[]
+
   @@map("organizations")
 }
