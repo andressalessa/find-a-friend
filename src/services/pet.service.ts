@@ -1,4 +1,4 @@
-import { CreatePetDTO, PetResponseDTO, UpdatePetDTO } from "@/dtos/pet.dto";
+import { CreatePetDTO, FilterPetsDTO, PetResponseDTO, UpdatePetDTO } from "@/dtos/pet.dto";
 import { IPetRepository } from "@/repositories/interfaces/pet.repository.interface";
 
 export class PetService {
@@ -18,9 +18,8 @@ export class PetService {
         return pets;
     }
 
-    async findByOwnerPhone(owners_phone: string): Promise<PetResponseDTO | null> {
-        const pet = await this.petRepository.findByOwnerPhone(owners_phone);
-        return pet;
+    async findByFilter(filter: FilterPetsDTO): Promise<PetResponseDTO[]> {
+        return await this.petRepository.findByFilter(filter);
     }
 
     async update(id: string, data: UpdatePetDTO): Promise<PetResponseDTO> {
