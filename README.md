@@ -3,11 +3,11 @@ REST API in nodejs
 
 
 ## Funcionalidades da Aplicação
-[ ] O cadastro de um pet
+[x] O cadastro de um pet
 [ ] A listagem de todos os pets disponíveis para adoção em uma determinada cidade
 [ ] A filtragem de pets com base em suas características (como idade, porte, etc.)
 [ ] A visualização dos detalhes de um pet específico
-[ ] O cadastro de uma ORG (organização)
+[x] O cadastro de uma ORG (organização)
 [ ] O login de uma ORG no sistema
 
 ## Regras de Negócio
@@ -24,7 +24,7 @@ REST API in nodejs
 
 [x] Rota para cadastrar uma ORG, garantindo que inclua endereço e número de WhatsApp
 [ ] Rota de login para uma ORG
-[...] Rota para cadastrar um pet, garantindo que ele seja associado a uma ORG
+[x] Rota para cadastrar um pet, garantindo que ele seja associado a uma ORG
 [ ] Rota para listar pets, exigindo a cidade como parâmetro obrigatório
 [ ] Implementar a funcionalidade de filtros opcionais por características dos pets na listagem
 [ ] Rota para visualizar os detalhes de um pet específico
