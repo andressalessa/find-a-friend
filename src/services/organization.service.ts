@@ -1,4 +1,4 @@
-import { CreateOrganizationDTO, OrganizationResponseDTO, UpdateOrganizationDTO } from "@/dtos/organization.dto";
+import { CreateOrganizationDTO, OrganizationEntity, OrganizationResponseDTO, UpdateOrganizationDTO } from "@/dtos/organization.dto";
 import { IOrganizationRepository } from "@/repositories/interfaces/organization.repository.interface";
 import { hash } from "bcryptjs";
 
@@ -27,6 +27,10 @@ export class OrganizationService {
 
         const { password_hash: _, ...organizationResponse } = organization;
         return organizationResponse;
+    }
+
+    async findByEmail(email: string): Promise<OrganizationEntity | null> {
+        return this.organizationRepository.findByEmail(email);
     }
 
     async update(id: string, data: UpdateOrganizationDTO): Promise<OrganizationResponseDTO> {
