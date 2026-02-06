@@ -8,6 +8,11 @@ export class PetService {
         return pet;
     }
 
+    async findAll(): Promise<PetResponseDTO[]> {
+        const pets = await this.petRepository.findAll();
+        return pets;
+    }
+
     async findById(id: string): Promise<PetResponseDTO | null> {
         const pet = await this.petRepository.findById(id);
         return pet;

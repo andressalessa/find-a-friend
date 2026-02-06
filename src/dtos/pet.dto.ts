@@ -17,6 +17,7 @@ export const updatePetSchema = z.object({
     size: z.enum(['SMALL', 'MEDIUM', 'LARGE']).optional(),
     city: z.string().optional(),
     organizationId: z.string().optional(),
+    adopted_at: z.coerce.date().nullable().optional(),
 })
 
 export type UpdatePetDTO = z.infer<typeof updatePetSchema>
@@ -37,6 +38,7 @@ export type PetResponseDTO = {
     age: number
     size: string
     city: string
+    adopted_at: Date | null
     created_at: Date
     updated_at: Date
     organizationId: string

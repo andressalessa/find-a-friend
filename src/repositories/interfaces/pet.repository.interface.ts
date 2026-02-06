@@ -2,6 +2,7 @@ import { CreatePetDTO, FilterPetsDTO, PetResponseDTO, UpdatePetDTO } from "@/dto
 
 export interface IPetRepository {
     create(data: CreatePetDTO): Promise<PetResponseDTO>
+    findAll(): Promise<PetResponseDTO[]>
     findById(id: string): Promise<PetResponseDTO | null>
     findByCity(city: string): Promise<PetResponseDTO[]>
     findByFilter(filter: FilterPetsDTO): Promise<PetResponseDTO[]>

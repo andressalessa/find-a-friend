@@ -27,7 +27,7 @@ REST API in nodejs
 [x] Rota para cadastrar um pet, garantindo que ele seja associado a uma ORG
 [x] Rota para listar pets, exigindo a cidade como parâmetro obrigatório
 [x] Implementar a funcionalidade de filtros opcionais por características dos pets na listagem
-[ ] Rota para visualizar os detalhes de um pet específico
+[x] Rota para visualizar os detalhes de um pet específico
 [ ] Garantir que o acesso de administrador da ORG seja restrito a usuários logados
 [x] Aplicar os princípios SOLID durante o desenvolvimento da estrutura da API
 [ ] Criar testes para validar as funcionalidades e regras de negócio
