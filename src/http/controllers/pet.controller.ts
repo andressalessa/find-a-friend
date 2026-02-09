@@ -48,7 +48,18 @@ export class PetController {
         const filter = filterPetsSchema.parse(request.query);
         const pets = await this.petService.findByFilter(filter);
         const baseUrl = getBaseUrl(request);
-        return reply.status(200).send(pets.map((p) => withImageUrls(baseUrl, p)));
+        const petsWithImages = pets.map((p) => withImageUrls(baseUrl, p));
+
+        return reply.status(200).send(petsWithImages);
+    }
+
+    findAvailable = async (request: FastifyRequest, reply: FastifyReply) => {
+        const { city } = filterPetsSchema.parse(request.query);
+        const pets = await this.petService.findByFilter({ city, adopted_at: null });
+        const baseUrl = getBaseUrl(request);
+        const petsWithImages = pets.map((p) => withImageUrls(baseUrl, p));
+
+        return reply.status(200).send(petsWithImages);
     }
 
     adopt = async (request: FastifyRequest, reply: FastifyReply) => {
