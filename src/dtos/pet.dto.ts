@@ -16,8 +16,8 @@ export const updatePetSchema = z.object({
     age: z.number().optional(),
     size: z.enum(['SMALL', 'MEDIUM', 'LARGE']).optional(),
     city: z.string().optional(),
-    organizationId: z.string().optional(),
     adopted_at: z.coerce.date().nullable().optional(),
+    organizationId: z.string().optional(),
 })
 
 export type UpdatePetDTO = z.infer<typeof updatePetSchema>
@@ -27,6 +27,7 @@ export const filterPetsSchema = z.object({
     age: z.number().optional(),
     size: z.enum(['SMALL', 'MEDIUM', 'LARGE']).optional(),
     city: z.string("City is required"),
+    adopted_at: z.coerce.date().nullable().optional(),
     organizationId: z.string().optional(),
 })
 
