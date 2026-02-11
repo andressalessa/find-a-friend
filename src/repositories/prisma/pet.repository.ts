@@ -78,4 +78,10 @@ export class PrismaPetRepository implements IPetRepository {
         return pet;
     }
 
+    async delete(id: string): Promise<void> {
+        await prisma.pet.delete({
+            where: { id },
+        });
+    }
+
 }

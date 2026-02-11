@@ -15,12 +15,14 @@ npm i typescript @types/node tsx tsup -D
 npm i prisma -D
 npm install -D @types/pg
 
+# prod
 npm i fastify
 npm i dotenv
 # this one is used to access the database
 npm i @prisma/client
 npm install pg @prisma/adapter-pg
 npm i bcryptjs
+npm i @fastify/jwt @fastify/cookie
 
 ```
 

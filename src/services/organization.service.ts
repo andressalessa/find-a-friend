@@ -1,6 +1,6 @@
 import { CreateOrganizationDTO, OrganizationEntity, OrganizationResponseDTO, UpdateOrganizationDTO } from "@/dtos/organization.dto";
 import { IOrganizationRepository } from "@/repositories/interfaces/organization.repository.interface";
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 
 export class OrganizationService {
     constructor(private organizationRepository: IOrganizationRepository) { }
@@ -38,5 +38,21 @@ export class OrganizationService {
 
         const { password_hash: _, ...organizationResponse } = organization;
         return organizationResponse;
+    }
+
+    async authenticate(email: string, password: string): Promise<OrganizationResponseDTO> {
+        const organization = await this.organizationRepository.findByEmail(email);
+
+        if (!organization) {
+            throw new Error("Organization not found");
+        }
+
+        const isPasswordValid = await compare(password, organization.password_hash);
+
+        if (!isPasswordValid) {
+            throw new Error("Invalid password");
+        }
+
+        return organization;
     }
 }

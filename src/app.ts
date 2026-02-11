@@ -9,6 +9,8 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import { organizationRoutes } from "./http/routes/organization.routes";
 import { petImageRoutes } from './http/routes/pet-image.routes';
 import { petRoutes } from './http/routes/pet.routes';
+import fastifyJwt from '@fastify/jwt';
+import { env } from './env';
 
 export const app = fastify();
 
@@ -25,6 +27,17 @@ app.setErrorHandler((error, _request, reply) => {
     }
     throw error;
 });
+
+app.register(fastifyJwt, {
+    secret: env.JWT_SECRET,
+    cookie: {
+      cookieName: 'refreshToken',
+      signed: false,
+    },
+    sign: {
+      expiresIn: '10m',
+    },
+  })
 
 app.register(fastifyMultipart, {
     limits: {
@@ -45,8 +58,18 @@ app.register(fastifySwagger, {
             title: 'FindAFriend API',
             description: 'API for the FindAFriend project',
             version: '1.0.0',
-        }
-    }
+        },
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                    description: 'Token JWT obtido na rota POST /organizations/authenticate',
+                },
+            },
+        },
+    },
 });
 
 app.register(fastifySwaggerUi, {

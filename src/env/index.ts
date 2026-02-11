@@ -15,6 +15,7 @@ const envSchema = z.object({
     // coerce.<type> converts the type of the environment variable to the informed type
     // z.coerce.number() converts the environment variable to a number
     PORT: z.coerce.number().default(3333),
+    JWT_SECRET: z.string(),
 })
 
 // safeParse is a function that parses the environment variables and returns a success or error

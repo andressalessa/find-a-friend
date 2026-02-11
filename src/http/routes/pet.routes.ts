@@ -1,13 +1,19 @@
 import { makePetController } from "@/factories/make-pet.controller";
 import { FastifyInstance } from "fastify";
+import { verifyJWT } from "../middlewares/verify-jwt";
 
 export async function petRoutes(app: FastifyInstance) {
     const petController = makePetController();
 
     app.post('/pets', {
-        schema: {
+        onRequest: [verifyJWT], schema: {
             summary: 'Create a pet',
             tags: ['Pets'],
+            security: [
+                {
+                    bearerAuth: []
+                }
+            ],
             body: {
                 type: 'object',
                 required: ['name', 'age', 'size', 'city', 'organizationId'],
@@ -221,6 +227,7 @@ export async function petRoutes(app: FastifyInstance) {
     }, petController.findAvailable);
 
     app.patch('/pets/:id/adopt', {
+        onRequest: [verifyJWT], 
         schema: {
             summary: 'Adopt a pet',
             tags: ['Pets'],
@@ -230,6 +237,11 @@ export async function petRoutes(app: FastifyInstance) {
                     id: { type: 'string' },
                 },
             },
+            security: [
+                {
+                    bearerAuth: []
+                }
+            ],
             response: {
                 200: {
                     description: 'Pet adopted successfully',
@@ -243,4 +255,39 @@ export async function petRoutes(app: FastifyInstance) {
             },
         }
     }, petController.adopt);
+
+    app.delete('/pets/:id', {
+        onRequest: [verifyJWT],
+        schema: {
+            summary: 'Delete a pet',
+            tags: ['Pets'],
+            params: {
+                type: 'object',
+                properties: {
+                    id: { type: 'string' },
+                },
+            },
+            security: [
+                {
+                    bearerAuth: []
+                }
+            ],
+            response: {
+                204: {
+                    description: 'Pet deleted successfully',
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' },
+                    },
+                },
+                404: {
+                    description: 'Pet not found',
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' },
+                    },
+                },
+            },
+        }
+    }, petController.delete);
 }

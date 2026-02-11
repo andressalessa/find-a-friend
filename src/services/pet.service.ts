@@ -31,4 +31,8 @@ export class PetService {
         const pet = await this.petRepository.update(id, data);
         return pet;
     }
+
+    async delete(id: string): Promise<void> {
+        return await this.petRepository.delete(id);
+    }
 }
