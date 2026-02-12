@@ -10,7 +10,9 @@
     "dev:up": "docker compose up -d",
     "dev:down": "docker compose down",
     "migrate:dev": "npx prisma migrate dev",
-    "generate": "npx prisma generate"
+    "generate": "npx prisma generate",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -31,7 +33,8 @@
     "prisma": "7.3.0",
     "tsup": "8.5.1",
     "tsx": "4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "4.0.18"
   },
   "dependencies": {
     "@fastify/cookie": "11.0.2",
