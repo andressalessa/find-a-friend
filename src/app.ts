@@ -1,10 +1,14 @@
 import '@/env'
 import fastify from "fastify";
+import path from "node:path";
 import { ZodError } from "zod";
-import { organizationRoutes } from "./http/routes/organization.routes";
-import { petRoutes } from './http/routes/pet.routes';
+import fastifyMultipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import { organizationRoutes } from "./http/routes/organization.routes";
+import { petImageRoutes } from './http/routes/pet-image.routes';
+import { petRoutes } from './http/routes/pet.routes';
 
 export const app = fastify();
 
@@ -20,6 +24,17 @@ app.setErrorHandler((error, _request, reply) => {
         });
     }
     throw error;
+});
+
+app.register(fastifyMultipart, {
+    limits: {
+        fileSize: 1024 * 1024 * 5, // 5MB
+    },
+});
+
+app.register(fastifyStatic, {
+    root: path.join(process.cwd(), "uploads"),
+    prefix: "/uploads/",
 });
 
 // Swagger documentation
@@ -41,3 +56,4 @@ app.register(fastifySwaggerUi, {
 // API routes
 app.register(organizationRoutes);
 app.register(petRoutes);
+app.register(petImageRoutes);

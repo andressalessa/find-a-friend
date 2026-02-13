@@ -12,7 +12,7 @@ import { z } from 'zod'
 
 const envSchema = z.object({
     NODE_ENV: z.enum(['dev', 'test', 'production']).default('dev'),
-    // coerce.<type> converts the type of the environment variable to the informed type 
+    // coerce.<type> converts the type of the environment variable to the informed type
     // z.coerce.number() converts the environment variable to a number
     PORT: z.coerce.number().default(3333),
 })

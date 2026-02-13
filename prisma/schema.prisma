@@ -21,9 +21,11 @@ model Pet {
   size String
   city String
   description String?
-  energy_level Int
+  energy_level String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  images PetImage[]
 
   organizationId String
   organization Organization @relation(fields: [organizationId], references: [id])
@@ -43,4 +45,16 @@ model Organization {
   pets Pet[]
 
   @@map("organizations")
+}
+
+model PetImage {
+  id String @id @default(uuid())
+  url String
+  pet_id String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  pet Pet @relation(fields: [pet_id], references: [id])
+
+  @@map("pet_images")
 }

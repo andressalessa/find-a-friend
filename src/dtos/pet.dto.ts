@@ -1,4 +1,5 @@
 import z from "zod";
+import { PetImageResponseDTO } from "./pet-image.dto";
 
 export const createPetSchema = z.object({
     name: z.string("Name is required"),
@@ -39,4 +40,5 @@ export type PetResponseDTO = {
     created_at: Date
     updated_at: Date
     organizationId: string
+    images?: PetImageResponseDTO[]
 }
