@@ -20,6 +20,7 @@ model Pet {
   age Int
   size String
   city String
+  owners_phone String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
