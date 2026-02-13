@@ -70,4 +70,18 @@ export class PetController {
 
         return reply.status(200).send(withImageUrls(baseUrl, pet));
     }
+
+    delete = async (request: FastifyRequest, reply: FastifyReply) => {
+        const { id } = request.params as { id: string };
+
+
+        const pet = await this.petService.findById(id);
+        if (!pet) {
+            return reply.status(404).send({ message: "Pet not found" });
+        }
+
+        await this.petService.delete(id);
+
+        return reply.status(204).send({ message: "Pet deleted successfully" });
+    }
 }

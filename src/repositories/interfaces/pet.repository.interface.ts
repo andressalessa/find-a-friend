@@ -7,4 +7,5 @@ export interface IPetRepository {
     findByCity(city: string): Promise<PetResponseDTO[]>
     findByFilter(filter: FilterPetsDTO): Promise<PetResponseDTO[]>
     update(id: string, data: UpdatePetDTO): Promise<PetResponseDTO>
+    delete(id: string): Promise<void>
 }

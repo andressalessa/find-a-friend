@@ -55,7 +55,7 @@ model PetImage {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  pet Pet @relation(fields: [pet_id], references: [id])
+  pet Pet @relation(fields: [pet_id], references: [id], onDelete: Cascade)
 
   @@map("pet_images")
 }

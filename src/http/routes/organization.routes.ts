@@ -36,4 +36,28 @@ export async function organizationRoutes(app: FastifyInstance) {
             },
         }
     }, organizationController.create);
+
+    app.post('/organizations/authenticate', {
+        schema: {
+            summary: 'Authenticate an organization',
+            tags: ['Organizations'],
+            body: {
+                type: 'object',
+                required: ['email', 'password'],
+                properties: {
+                    email: { type: 'string', format: 'email' },
+                    password: { type: 'string' },
+                },
+            },
+            response: {
+                200: {
+                    description: 'Organization authenticated successfully',
+                    type: 'object',
+                    properties: {
+                        token: { type: 'string' },
+                    },
+                },
+            },
+        }
+    }, organizationController.authenticate);
 }

@@ -1,6 +1,6 @@
-import { CreateOrganizationDTO, createOrganizationSchema } from "@/dtos/organization.dto";
+import { authenticateOrganizationSchema, createOrganizationSchema } from "@/dtos/organization.dto";
 import { OrganizationService } from "@/services/organization.service";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyRequest, FastifyReply } from "fastify";
 
 export class OrganizationController {
     constructor(private organizationService: OrganizationService) { }
@@ -16,5 +16,21 @@ export class OrganizationController {
         const organization = await this.organizationService.create(data);
 
         return reply.status(201).send(organization);
+    }
+
+    authenticate = async (request: FastifyRequest, reply: FastifyReply) => {
+        const data = authenticateOrganizationSchema.parse(request.body);
+        const organization = await this.organizationService.authenticate(data.email, data.password);
+
+        const token = await reply.jwtSign(
+            {},
+            {
+                sign: {
+                    sub: organization.id,
+                },
+            }
+        );
+
+        return reply.status(200).send({ token });
     }
 }

@@ -38,3 +38,8 @@ export type OrganizationEntity = {
   created_at: Date
   updated_at: Date
 }
+
+export const authenticateOrganizationSchema = z.object({
+  email: z.string("Email is required").email("Invalid email"),
+  password: z.string("Password is required"),
+})
