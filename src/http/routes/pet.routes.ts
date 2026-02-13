@@ -97,7 +97,7 @@ export async function petRoutes(app: FastifyInstance) {
             },
             response: {
                 200: {
-                    description: 'Pet found successfully',
+                    description: 'Pet found successfully (includes organization contact for adoption)',
                     type: 'object',
                     properties: {
                         id: { type: 'string' },
@@ -109,6 +109,14 @@ export async function petRoutes(app: FastifyInstance) {
                         created_at: { type: 'string', format: 'date-time' },
                         updated_at: { type: 'string', format: 'date-time' },
                         organizationId: { type: 'string' },
+                        organization: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'string' },
+                                name: { type: 'string' },
+                                whatsapp: { type: 'string', description: 'Contato da ORG para adoção' },
+                            },
+                        },
                         images: {
                             type: 'array',
                             items: {
@@ -206,6 +214,14 @@ export async function petRoutes(app: FastifyInstance) {
                             created_at: { type: 'string', format: 'date-time' },
                             updated_at: { type: 'string', format: 'date-time' },
                             organizationId: { type: 'string' },
+                            organization: {
+                                type: 'object',
+                                properties: {
+                                    id: { type: 'string' },
+                                    name: { type: 'string' },
+                                    whatsapp: { type: 'string', description: 'Contato da ORG para adoção' },
+                                },
+                            },
                             images: {
                                 type: 'array',
                                 items: {
@@ -225,6 +241,74 @@ export async function petRoutes(app: FastifyInstance) {
             },
         }
     }, petController.findAvailable);
+
+    app.patch('/pets/:id', {
+        onRequest: [verifyJWT],
+        schema: {
+            summary: 'Update a pet',
+            tags: ['Pets'],
+            security: [{ bearerAuth: [] }],
+            params: {
+                type: 'object',
+                properties: {
+                    id: { type: 'string' },
+                },
+            },
+            body: {
+                type: 'object',
+                properties: {
+                    name: { type: 'string' },
+                    age: { type: 'number' },
+                    size: { type: 'string', enum: ['SMALL', 'MEDIUM', 'LARGE'] },
+                    city: { type: 'string' },
+                },
+            },
+            response: {
+                200: {
+                    description: 'Pet updated successfully',
+                    type: 'object',
+                    properties: {
+                        id: { type: 'string' },
+                        name: { type: 'string' },
+                        age: { type: 'number' },
+                        size: { type: 'string' },
+                        city: { type: 'string' },
+                        adopted_at: { type: 'string', format: 'date-time', nullable: true },
+                        created_at: { type: 'string', format: 'date-time' },
+                        updated_at: { type: 'string', format: 'date-time' },
+                        organizationId: { type: 'string' },
+                        images: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    id: { type: 'string' },
+                                    url: { type: 'string' },
+                                    pet_id: { type: 'string' },
+                                    created_at: { type: 'string', format: 'date-time' },
+                                    updated_at: { type: 'string', format: 'date-time' },
+                                },
+                            },
+                        },
+                    },
+                },
+                403: {
+                    description: 'Not the pet owner',
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' },
+                    },
+                },
+                404: {
+                    description: 'Pet not found',
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' },
+                    },
+                },
+            },
+        }
+    }, petController.update);
 
     app.patch('/pets/:id/adopt', {
         onRequest: [verifyJWT], 

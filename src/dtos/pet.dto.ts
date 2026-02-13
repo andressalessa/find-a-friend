@@ -33,6 +33,12 @@ export const filterPetsSchema = z.object({
 
 export type FilterPetsDTO = z.infer<typeof filterPetsSchema>
 
+export type OrganizationContactDTO = {
+    id: string
+    name: string
+    whatsapp: string
+}
+
 export type PetResponseDTO = {
     id: string
     name: string
@@ -44,4 +50,5 @@ export type PetResponseDTO = {
     updated_at: Date
     organizationId: string
     images?: PetImageResponseDTO[]
+    organization?: OrganizationContactDTO
 }

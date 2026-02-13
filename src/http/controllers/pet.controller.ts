@@ -18,8 +18,16 @@ function withImageUrls<T extends { images?: { url: string }[] }>(baseUrl: string
 export class PetController {
     constructor(private petService: PetService) { }
 
+    private isPetOwner(request: FastifyRequest, organizationId: string): boolean {
+        const sub = request.user?.sub;
+        return !!sub && sub === organizationId;
+    }
+
     create = async (request: FastifyRequest, reply: FastifyReply) => {
-        const data = createPetSchema.parse(request.body)
+        const data = createPetSchema.parse(request.body);
+        if (!this.isPetOwner(request, data.organizationId)) {
+            return reply.status(403).send({ message: "You can only create pets for your own organization" });
+        }
         const pet = await this.petService.create(data);
 
         return reply.status(201).send(pet);
@@ -62,22 +70,48 @@ export class PetController {
         return reply.status(200).send(petsWithImages);
     }
 
-    adopt = async (request: FastifyRequest, reply: FastifyReply) => {
+    update = async (request: FastifyRequest, reply: FastifyReply) => {
         const { id } = request.params as { id: string };
-        const data = { adopted_at: new Date() };
-        const pet = await this.petService.update(id, data);
+        const pet = await this.petService.findById(id);
+        if (!pet) {
+            return reply.status(404).send({ message: "Pet not found" });
+        }
+        if (!this.isPetOwner(request, pet.organizationId)) {
+            return reply.status(403).send({ message: "You can only update pets from your own organization" });
+        }
+        const body = updatePetSchema.parse(request.body);
+        const { organizationId: _o, adopted_at: _a, ...allowed } = body;
+        const updated = await this.petService.update(id, allowed);
         const baseUrl = getBaseUrl(request);
 
-        return reply.status(200).send(withImageUrls(baseUrl, pet));
+        return reply.status(200).send(withImageUrls(baseUrl, updated));
+    }
+
+    adopt = async (request: FastifyRequest, reply: FastifyReply) => {
+        const { id } = request.params as { id: string };
+        const pet = await this.petService.findById(id);
+        if (!pet) {
+            return reply.status(404).send({ message: "Pet not found" });
+        }
+        if (!this.isPetOwner(request, pet.organizationId)) {
+            return reply.status(403).send({ message: "You can only adopt (mark as adopted) pets from your own organization" });
+        }
+        const data = { adopted_at: new Date() };
+        const updated = await this.petService.update(id, data);
+        const baseUrl = getBaseUrl(request);
+
+        return reply.status(200).send(withImageUrls(baseUrl, updated));
     }
 
     delete = async (request: FastifyRequest, reply: FastifyReply) => {
         const { id } = request.params as { id: string };
 
-
         const pet = await this.petService.findById(id);
         if (!pet) {
             return reply.status(404).send({ message: "Pet not found" });
+        }
+        if (!this.isPetOwner(request, pet.organizationId)) {
+            return reply.status(403).send({ message: "You can only delete pets from your own organization" });
         }
 
         await this.petService.delete(id);

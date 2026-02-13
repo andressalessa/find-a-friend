@@ -13,19 +13,28 @@ export class PrismaPetRepository implements IPetRepository {
                 city: data.city,
                 organizationId: data.organizationId,
             },
+            include: {
+                images: true,
+                organization: {
+                    select: { id: true, name: true, whatsapp: true },
+                },
+            },
         });
 
-        return pet;
+        return pet as PetResponseDTO;
     }
 
     async findAll(): Promise<PetResponseDTO[]> {
         const pets = await prisma.pet.findMany({
             include: {
                 images: true,
+                organization: {
+                    select: { id: true, name: true, whatsapp: true },
+                },
             },
         });
 
-        return pets;
+        return pets as PetResponseDTO[];
     }
 
     async findById(id: string): Promise<PetResponseDTO | null> {
@@ -33,10 +42,13 @@ export class PrismaPetRepository implements IPetRepository {
             where: { id },
             include: {
                 images: true,
+                organization: {
+                    select: { id: true, name: true, whatsapp: true },
+                },
             },
         });
 
-        return pet;
+        return pet as PetResponseDTO | null;
     }
 
     async findByCity(city: string): Promise<PetResponseDTO[]> {
@@ -44,10 +56,13 @@ export class PrismaPetRepository implements IPetRepository {
             where: { city },
             include: {
                 images: true,
+                organization: {
+                    select: { id: true, name: true, whatsapp: true },
+                },
             },
         });
 
-        return pets;
+        return pets as PetResponseDTO[];
     }
 
     async findByFilter(filter: FilterPetsDTO): Promise<PetResponseDTO[]> {
@@ -59,10 +74,13 @@ export class PrismaPetRepository implements IPetRepository {
             where,
             include: {
                 images: true,
+                organization: {
+                    select: { id: true, name: true, whatsapp: true },
+                },
             },
         });
 
-        return pets;
+        return pets as PetResponseDTO[];
     }
 
     async update(id: string, data: UpdatePetDTO): Promise<PetResponseDTO> {
@@ -73,9 +91,15 @@ export class PrismaPetRepository implements IPetRepository {
         const pet = await prisma.pet.update({
             where: { id },
             data: dataWithoutUndefined,
+            include: {
+                images: true,
+                organization: {
+                    select: { id: true, name: true, whatsapp: true },
+                },
+            },
         });
 
-        return pet;
+        return pet as PetResponseDTO;
     }
 
     async delete(id: string): Promise<void> {
