@@ -1,37 +1,110 @@
 # find-a-friend
-REST API in nodejs
+REST API in Node.js
 
+## Application Features
+[x] Pet registration <br>
+[x] List all pets available for adoption in a given city <br>
+[x] Filter pets by characteristics (age, size, etc.) <br>
+[x] View details of a specific pet <br>
+[x] Organization (ORG) registration <br>
+[x] Organization login <br>
 
-## Funcionalidades da Aplicação
-[x] O cadastro de um pet
-[x] A listagem de todos os pets disponíveis para adoção em uma determinada cidade
-[x] A filtragem de pets com base em suas características (como idade, porte, etc.)
-[x] A visualização dos detalhes de um pet específico
-[x] O cadastro de uma ORG (organização)
-[x] O login de uma ORG no sistema
+## Business Rules
+### The following conditions must be implemented:
 
-## Regras de Negócio
-### As seguintes condições devem ser implementadas:
+[x] City is required to list pets <br>
+[x] An organization must have an address and a WhatsApp number <br>
+[x] Every registered pet must be linked to an organization <br>
+[x] Contact for adoption is made directly with the organization via WhatsApp <br>
+[x] All pet characteristic filters, except city, are optional <br>
+[x] Organizations must be logged in to access administrative features <br>
+[x] Only organizations can manage pet data (create, update, delete) <br>
+    [x] create <br>
+    [x] update <br>
+    [x] delete <br>
 
-[x] A informação da cidade é obrigatória para listar os pets
-[x] Uma ORG deve, obrigatoriamente, ter um endereço e um número de WhatsApp
-[x] Todo pet cadastrado precisa estar vinculado a uma ORG
-[x] O contato do usuário interessado em adotar um pet será feito diretamente com a ORG via WhatsApp
-[x] Todos os filtros de características do pet, com exceção da cidade, são opcionais
-[x] Para que uma ORG tenha acesso administrativo à aplicação, ela deve estar logada
-[...] Apenas organizações podem manipular os dados dos pets (cadastrar, alterar, excluir)
-    [x] cadastrar
-    [x] alterar
-    [x] excluir
+## Tasks
 
-## Tarefas
+[x] Route to register an organization (including address and WhatsApp) <br>
+[x] Organization login route <br>
+[x] Route to register a pet (associated with an organization) <br>
+[x] Route to list pets (city required as parameter) <br>
+[x] Optional filters by pet characteristics in the listing <br>
+[x] Route to view details of a specific pet <br>
+[x] Restrict organization admin access to logged-in users <br>
+[x] Apply SOLID principles in the API structure <br>
+[x] Create tests to validate features and business rules <br>
 
-[x] Rota para cadastrar uma ORG, garantindo que inclua endereço e número de WhatsApp
-[x] Rota de login para uma ORG
-[x] Rota para cadastrar um pet, garantindo que ele seja associado a uma ORG
-[x] Rota para listar pets, exigindo a cidade como parâmetro obrigatório
-[x] Implementar a funcionalidade de filtros opcionais por características dos pets na listagem
-[x] Rota para visualizar os detalhes de um pet específico
-[x] Garantir que o acesso de administrador da ORG seja restrito a usuários logados
-[x] Aplicar os princípios SOLID durante o desenvolvimento da estrutura da API
-[x] Criar testes para validar as funcionalidades e regras de negócio
+---
+
+## How to run the application
+
+### Prerequisites
+
+- Node.js (LTS recommended)
+- Docker and Docker Compose (for PostgreSQL)
+- npm or yarn
+
+### 1. Clone and install dependencies
+
+```bash
+git clone <repository-url>
+cd find-a-friend
+npm install
+```
+
+### 2. Configure environment variables
+
+Create a `.env` file in the project root (use `.env.example` as reference if it exists) with:
+
+```env
+NODE_ENV=dev
+PORT=3333
+JWT_SECRET=your-secret-jwt-key-here
+
+# Database connection (adjust if using different user/password)
+DATABASE_URL="postgresql://docker:docker@localhost:5433/findafriend"
+```
+
+- **JWT_SECRET:** A secret string used to sign tokens (e.g. `openssl rand -base64 32`).
+- **DATABASE_URL:** Must match the PostgreSQL user, password and port (Docker Compose exposes port **5433**).
+
+### 3. Start the database
+
+```bash
+npm run dev:up
+```
+
+This starts the PostgreSQL container on port 5433 (user `docker`, password `docker`, database `findafriend`).
+
+### 4. Run migrations and generate Prisma Client
+
+```bash
+npm run migrate:dev
+npm run generate
+```
+
+(If Prisma is already set to run generate after migrate, the second command can be skipped.)
+
+### 5. Start the API
+
+```bash
+npm run start:dev
+```
+
+The API runs in development mode (with hot reload) at **http://localhost:3333**.
+
+- **Documentation (Swagger):** http://localhost:3333/docs
+
+### Useful commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run start:dev` | Start the API in development mode |
+| `npm run start` | Start the API in production (after `npm run build`) |
+| `npm run build` | Build the project to `build/` |
+| `npm run dev:up` | Start PostgreSQL with Docker |
+| `npm run dev:down` | Stop and remove containers |
+| `npm run migrate:dev` | Run Prisma migrations |
+| `npm run test` | Run unit tests |
+| `npm run test:e2e` | Run e2e tests (database must be running) |
