@@ -29,6 +29,7 @@ export async function petRoutes(app: FastifyInstance) {
                         age: { type: 'number' },
                         size: { type: 'string' },
                         city: { type: 'string' },
+                        adopted_at: { type: 'string', format: 'date-time', nullable: true },
                         created_at: { type: 'string', format: 'date-time' },
                         updated_at: { type: 'string', format: 'date-time' },
                         organizationId: { type: 'string' },
@@ -37,6 +38,46 @@ export async function petRoutes(app: FastifyInstance) {
             },
         }
     }, petController.create);
+
+    app.get('/pets', {
+        schema: {
+            summary: 'Get all pets',
+            tags: ['Pets'],
+            response: {
+                200: {
+                    description: 'Pets found successfully',
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            id: { type: 'string' },
+                            name: { type: 'string' },
+                            age: { type: 'number' },
+                            size: { type: 'string' },
+                            city: { type: 'string' },
+                            adopted_at: { type: 'string', format: 'date-time', nullable: true },
+                            created_at: { type: 'string', format: 'date-time' },
+                            updated_at: { type: 'string', format: 'date-time' },
+                            organizationId: { type: 'string' },
+                            images: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        id: { type: 'string' },
+                                        url: { type: 'string', description: 'Full URL to the image' },
+                                        pet_id: { type: 'string' },
+                                        created_at: { type: 'string', format: 'date-time' },
+                                        updated_at: { type: 'string', format: 'date-time' },
+                                    },
+                                },
+                            }
+                        },
+                    },
+                },
+            },
+        }
+    }, petController.findAll);
 
     app.get('/pets/:id', {
         schema: {
@@ -58,6 +99,7 @@ export async function petRoutes(app: FastifyInstance) {
                         age: { type: 'number' },
                         size: { type: 'string' },
                         city: { type: 'string' },
+                        adopted_at: { type: 'string', format: 'date-time', nullable: true },
                         created_at: { type: 'string', format: 'date-time' },
                         updated_at: { type: 'string', format: 'date-time' },
                         organizationId: { type: 'string' },
@@ -80,7 +122,7 @@ export async function petRoutes(app: FastifyInstance) {
         }
     }, petController.findById);
 
-    app.get('/pets', {
+    app.get('/pets/filter', {
         schema: {
             summary: 'Get pets by filter',
             tags: ['Pets'],
@@ -107,6 +149,7 @@ export async function petRoutes(app: FastifyInstance) {
                             age: { type: 'number' },
                             size: { type: 'string' },
                             city: { type: 'string' },
+                            adopted_at: { type: 'string', format: 'date-time', nullable: true },
                             created_at: { type: 'string', format: 'date-time' },
                             updated_at: { type: 'string', format: 'date-time' },
                             organizationId: { type: 'string' },
@@ -129,4 +172,28 @@ export async function petRoutes(app: FastifyInstance) {
             },
         }
     }, petController.findByFilter);
+
+    app.patch('/pets/:id/adopt', {
+        schema: {
+            summary: 'Adopt a pet',
+            tags: ['Pets'],
+            params: {
+                type: 'object',
+                properties: {
+                    id: { type: 'string' },
+                },
+            },
+            response: {
+                200: {
+                    description: 'Pet adopted successfully',
+                    type: 'object',
+                    properties: {
+                        id: { type: 'string' },
+                        name: { type: 'string' },
+                        adopted_at: { type: 'string', format: 'date-time' },
+                    },
+                },
+            },
+        }
+    }, petController.adopt);
 }

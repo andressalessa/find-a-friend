@@ -18,6 +18,16 @@ export class PrismaPetRepository implements IPetRepository {
         return pet;
     }
 
+    async findAll(): Promise<PetResponseDTO[]> {
+        const pets = await prisma.pet.findMany({
+            include: {
+                images: true,
+            },
+        });
+
+        return pets;
+    }
+
     async findById(id: string): Promise<PetResponseDTO | null> {
         const pet = await prisma.pet.findUnique({
             where: { id },
