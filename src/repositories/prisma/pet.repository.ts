@@ -1,4 +1,4 @@
-import { CreatePetDTO, PetResponseDTO, UpdatePetDTO } from "@/dtos/pet.dto";
+import { CreatePetDTO, FilterPetsDTO, PetResponseDTO, UpdatePetDTO } from "@/dtos/pet.dto";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "generated/prisma/client";
 import { IPetRepository } from "../interfaces/pet.repository.interface";
@@ -35,12 +35,16 @@ export class PrismaPetRepository implements IPetRepository {
         return pets;
     }
 
-    async findByOwnerPhone(owners_phone: string): Promise<PetResponseDTO | null> {
-        const pet = await prisma.pet.findFirst({
-            where: { owners_phone },
+    async findByFilter(filter: FilterPetsDTO): Promise<PetResponseDTO[]> {
+        const where = Object.fromEntries(
+            Object.entries(filter).filter(([, v]) => v !== undefined)
+        ) as Prisma.PetWhereInput;
+
+        const pets = await prisma.pet.findMany({
+            where,
         });
 
-        return pet;
+        return pets;
     }
 
     async update(id: string, data: UpdatePetDTO): Promise<PetResponseDTO> {
