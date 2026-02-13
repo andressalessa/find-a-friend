@@ -173,6 +173,53 @@ export async function petRoutes(app: FastifyInstance) {
         }
     }, petController.findByFilter);
 
+    app.get('/pets/available', {
+        schema: {
+            summary: 'Get available pets',
+            tags: ['Pets'],
+            query: {
+                type: 'object',
+                properties: {
+                    city: { type: 'string' },
+                },
+                required: ['city']
+            },
+            response: {
+                200: {
+                    description: 'Available pets found successfully',
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            id: { type: 'string' },
+                            name: { type: 'string' },
+                            age: { type: 'number' },
+                            size: { type: 'string' },
+                            city: { type: 'string' },
+                            adopted_at: { type: 'string', format: 'date-time', nullable: true },
+                            created_at: { type: 'string', format: 'date-time' },
+                            updated_at: { type: 'string', format: 'date-time' },
+                            organizationId: { type: 'string' },
+                            images: {
+                                type: 'array',
+                                items: {
+                                    type: 'object',
+                                    properties: {
+                                        id: { type: 'string' },
+                                        url: { type: 'string', description: 'Full URL to the image' },
+                                        pet_id: { type: 'string' },
+                                        created_at: { type: 'string', format: 'date-time' },
+                                        updated_at: { type: 'string', format: 'date-time' },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        }
+    }, petController.findAvailable);
+
     app.patch('/pets/:id/adopt', {
         schema: {
             summary: 'Adopt a pet',
