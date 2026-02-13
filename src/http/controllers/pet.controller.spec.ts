@@ -1,3 +1,4 @@
+// um teste
 import { app } from "@/app";
 import { createAndAuthenticateOrganization } from "@/utils/create-and-authenticate-organization";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
