@@ -22,6 +22,16 @@ export type OrganizationResponseDTO = {
   id: string
   name: string
   email: string
+  whatsapp: string
+  address: string
+  created_at: Date
+  updated_at: Date
+}
+
+export type OrganizationEntity = {
+  id: string
+  name: string
+  email: string
   password_hash: string
   whatsapp: string
   address: string

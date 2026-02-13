@@ -25,12 +25,14 @@ export class OrganizationService {
             address,
         });
 
-        return organization;
+        const { password_hash: _, ...organizationResponse } = organization;
+        return organizationResponse;
     }
 
     async update(id: string, data: UpdateOrganizationDTO): Promise<OrganizationResponseDTO> {
         const organization = await this.organizationRepository.update(id, data);
 
-        return organization;
+        const { password_hash: _, ...organizationResponse } = organization;
+        return organizationResponse;
     }
 }
